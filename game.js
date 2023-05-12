@@ -6,6 +6,8 @@ class Navi extends AdventureScene {
         this.load.image('mallsignmain', 'mallsign.png')
         this.load.image('spbdirect', 'directionsspb.png')
         this.load.image('furniture', 'furniturestore.png')
+        this.load.image('exit', 'exitsign.png')
+        this.load.image('fcsign', 'foodcourtsign.png')
     }
     onEnter() {
         this.add.sprite(this.w * 0.375, this.w * 0.275, 'mallsignmain').setScale(1.5)
@@ -14,47 +16,87 @@ class Navi extends AdventureScene {
             .on('pointerover', () => {
                 this.showMessage('Shirts, Pants, and Beyond! The best clothing store in town')
             }) 
+            .on('pointerdown', () => {
+                this.gotoScene('clothes')
+            })
         this.add.sprite(this.w * 0.2616, this.w * 0.169, 'furniture').setScale(1.50)
             .setInteractive()
             .on('pointerover', () => {
                 this.showMessage(`Now That's What I Call Furniture! A primo place to buy some sweet new stuff.`)
             })
             .on('pointerdown', () => {
-                this.buy('t-shirt', 150)
-                this.updateInventory
+                this.gotoScene('furniture')
+            })
+        this.add.sprite(this.w* 0.426, this.w * 0.284, 'exit').setScale(1.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Leaving already?')
+            })
+            .on('pointerdown', () => {
+                this.gotoScene('outro')
+            })
+        this.add.sprite(this.w*0.418, this.w* 0.193, 'fcsign').setScale(1.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('The Food Court! You HAVE to visit.')
+            })
+            .on('pointerdown', () => {
+                this.gotoScene('fc')
             })
     }
 }
 
 class Furniture extends AdventureScene {
     constructor() {
-        super("furniture", "The second room has a long name (it truly does).");
+        super("furniture", "Now That's What I Call Furniture!");
+    }
+    preload() {
+        this.load.image('fstorebg', 'fstorebg.png')
+        this.load.image('purptable', 'purptable.png')
+        this.load.image('wardrobe', 'wardrobe.png')
+        this.load.image('bluechair', 'bluechair.png')
+        this.load.image('fstoreguy', 'furniturestoreguy.png')
     }
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
+        this.add.sprite(this.w * 0.375, this.w * 0.375, 'fstorebg').setScale(3.4)
+        this.add.sprite(this.w * 0.5, this.w * 0.4, 'purptable').setScale(0.4)
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
+                this.showMessage('A beautiful handmade purple table for only 200$!')
             })
             .on('pointerdown', () => {
-                this.gotoScene('navi');
-            });
-
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
+                this.buy('purple table', 200)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.65, this.w * 0.36, 'wardrobe').setScale(0.6)
             .setInteractive()
             .on('pointerover', () => {
-                this.showMessage('*giggles*');
-                this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
-                    ease: 'Sine.inOut',
-                    duration: 500
-                });
+                this.showMessage('An antique wardrobe! 500$ for this, is it worth it?')
             })
-            .on('pointerdown', () => 
-            this.gotoScene('outro'));
+            .on('pointerdown', () => {
+                this.buy('wardrobe', 500)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.33, this.w * 0.38, 'bluechair').setScale(0.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A comfy blue chair for 300$')
+            })
+            .on('pointerdown', () => {
+                this.buy('blue chair', 300)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.15, this.w * 0.38, 'fstoreguy').setScale(0.8)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Are you done shopping for furniture?')
+            })
+            .on('pointerdown', () => {
+                this.showMessage('Thanks for visiting!')
+                this.time.delayedCall(1500, this.gotoScene('navi'))
+            })
+
+        
     }
 }
 class FrontEntrance extends AdventureScene {
@@ -110,12 +152,154 @@ class FrontEntrance extends AdventureScene {
 }
 class FoodCourt extends AdventureScene {
     constructor() {
-        super('FC')
+        super('fc')
+    }
+    preload() {
+        this.load.image('fcbg', 'fcbg.png')
+        this.load.image('pizzaheaven', 'pizzaheaven!.png')
+        this.load.image('chickenshop', 'chickenshop.png')
+        this.load.image('eggout', 'eggout.png')
+        this.load.image('exitfc', 'exitfc.png')
+    }
+    onEnter() {
+        this.add.sprite(this.w*0.077, this.w*0.6, 'fcbg').setScale(6)
+        this.add.sprite(this.w*0.15, this.w*0.3, 'pizzaheaven').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Pizza Heaven! The cheesiest place around. Get a slice for just 5$!')
+            })
+            .on('pointerdown', () => {
+                this.buy('slice of pizza', 5)
+                this.updateInventory
+            })
+        this.add.sprite(this.w*0.4, this.w*0.3, 'chickenshop').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage(`Let's Chicken! A perfectly crips bite every time. A 6 piece meal is 10$`)
+            })
+            .on('pointerdown', () => {
+                this.buy('6 piece meal', 10)
+                this.updateInventory
+            })
+        this.add.sprite(this.w*0.6, this.w*0.3, 'eggout')
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Egg Out! Open from 8-2 every day, an egg sandwich is 10$.')
+            })
+            .on('pointerdown', () => {
+                this.buy('Egg Sandwich', 10)
+                this.updateInventory
+            })
+        this.add.sprite(this.w*0.65, this.w*0.5, 'exitfc').setScale(0.5)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Do you want to leave the food court?')
+            })
+            .on('pointerdown', () => {
+                this.showMessage('See you later!')
+                this.time.delayedCall(1000, this.gotoScene('navi'))
+            })
     }
 }
 class Clothing extends AdventureScene {
     constructor() {
         super('clothes')
+    }
+    preload() {
+        this.load.image('cstorebg', 'cstorebg.png')
+        this.load.image('cstoreguy', 'clothesstoreguy2.png')
+        this.load.image('bluepants', 'bluepants.png')
+        this.load.image('multicolorpants', '2cpants.png')
+        this.load.image('whitepants', 'whitepants.png')
+        this.load.image('blackpants', 'blackpants.png')
+        this.load.image('blueshirt', 'blueshirt.png')
+        this.load.image('greenshirt', 'greenshirt.png')
+        this.load.image('redshirt', 'redshirt.png')
+        this.load.image('yellowshirt', 'yellowshirt.png')
+    }
+    onEnter() {
+        this.add.sprite(this.w * 0.35, this.w*0.4, 'cstorebg').setScale(3.7)
+        this.add.sprite(this.w * 0.376, this.w*0.36, 'cstoreguy').setScale(1.2)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Welcome to Shirts, Pants, and Beyond!')
+            })
+            .on('pointerdown', () => {
+                this.showMessage('Thanks for coming in!')
+                this.time.delayedCall(1000, this.gotoScene('navi'))
+            })
+        this.add.sprite(this.w * 0.25, this.w*0.15, 'bluepants').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A beautiful pair of blue pants for 50$')
+            })
+            .on('pointerdown', () => {
+                this.buy('blue pants', 50)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.25, this.w*0.3, 'multicolorpants').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Some sweet multi colored pants! 75$')
+            })
+            .on('pointerdown', () => {
+                this.buy('multi-colored pants', 75)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.35, this.w*0.148, 'whitepants').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage(`Clean white pants for 50$, don't get them dirty!`)
+            })
+            .on('pointerdown', () => {
+                this.buy('white pants', 50)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.35, this.w*0.3, 'blackpants').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Some awesome black pants for 100$')
+            })
+            .on('pointerdown', () => {
+                this.buy('black pants', 100)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.5, this.w*0.15, 'blueshirt').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A nice striped blue shirt for 50$')
+            })
+            .on('pointerdown', () => {
+                this.buy('blue shirt', 50)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.495, this.w*0.3, 'greenshirt').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A happy green shirt for 50$!')
+            })
+            .on('pointerdown', () => {
+                this.buy('green shirt', 50)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.665, this.w*0.15, 'redshirt').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A classic plain red shirt for 25$')
+            })
+            .on('pointerdown', () => {
+                this.buy('red shirt', 25)
+                this.updateInventory
+            })
+        this.add.sprite(this.w * 0.665, this.w*0.3, 'yellowshirt').setScale(0.7)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('A striped yellow shirt for 50$. It reminds me of someone!')
+            })
+            .on('pointerdown', () => {
+                this.buy('yellow shirt', 50)
+                this.updateInventory
+            })
     }
 }
 class Intro extends Phaser.Scene {
@@ -138,7 +322,7 @@ class Intro extends Phaser.Scene {
                 duration: 3000
             })
             this.time.delayedCall(3000, () => this.cameras.main.fade(1000, 0,0,0));
-            this.time.delayedCall(1
+            this.time.delayedCall(4000
                 , () => this.scene.start('FE'));
         });
     }
@@ -163,7 +347,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, FrontEntrance, Navi, Furniture, FoodCourt, Outro],
-    title: "Adventure Game",
+    scene: [Intro, FrontEntrance, Navi, Furniture, Clothing, FoodCourt, Outro],
+    title: "Midtown Mall",
 });
 

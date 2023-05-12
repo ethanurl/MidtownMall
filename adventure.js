@@ -63,7 +63,9 @@ class AdventureScene extends Phaser.Scene {
             console.warn('gaining item already held:', item);
             return;
         }
-        this.loseItem(this.bankaccount)
+        if (this.inventory.includes(this.bankaccount)) {
+            this.loseItem(this.bankaccount)
+        }
         this.inventory.push(item)
         this.bankaccount -= price
         this.gainItem(this.bankaccount)
