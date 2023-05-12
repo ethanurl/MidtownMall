@@ -4,9 +4,11 @@ Gonna keep working on the next scenes 1 at a time and hope for no issues.
 Maybe I can change the background color or inventory font to feel more 'gamey'.
 Also wanna add 'buy' and 'broke' methods to adventurejs
 the buy one 
+
 Commit 2: I added the buy method and worked on adding a couple things for the next scene.
 Added bank account system.
 gonna stop 4 now
+
 Commit 3: I finished all the rooms
 Fixed buy method
 Added all the pngs to different signs
