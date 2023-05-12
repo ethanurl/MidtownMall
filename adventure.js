@@ -10,6 +10,8 @@ class AdventureScene extends Phaser.Scene {
     }
 
     create() {
+        this.bankaccount = (this.inventory[this.inventory.length - 1])
+
         this.transitionDuration = 1000;
 
         this.w = this.game.config.width;
@@ -52,7 +54,22 @@ class AdventureScene extends Phaser.Scene {
         this.onEnter();
 
     }
-
+    buy(item, price) {
+        if (this.bankaccount < price) {
+            this.showMessage('Not enough money for this item!');
+            return
+        }
+        if (this.inventory.includes(item)) {
+            console.warn('gaining item already held:', item);
+            return;
+        }
+        this.loseItem(this.bankaccount)
+        this.inventory.push(item)
+        this.bankaccount -= price
+        this.gainItem(this.bankaccount)
+        this.showMessage(`Your bank value is ${this.bankaccount}`)
+        this.updateInventory
+    }
     showMessage(message) {
         this.messageBox.setText(message);
         this.tweens.add({
@@ -131,7 +148,7 @@ class AdventureScene extends Phaser.Scene {
                 });
             }
         }
-        this.time.delayedCall(500, () => {
+        this.time.delayedCall(1, () => {
             this.inventory = this.inventory.filter((e) => e != item);
             this.updateInventory();
         });

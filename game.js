@@ -5,15 +5,30 @@ class Navi extends AdventureScene {
     preload() {
         this.load.image('mallsignmain', 'mallsign.png')
         this.load.image('spbdirect', 'directionsspb.png')
+        this.load.image('furniture', 'furniturestore.png')
     }
     onEnter() {
-        this.add.sprite(this.w * 0.375, this.w * 0.275, 'mallsignmain').setScale(2)
+        this.add.sprite(this.w * 0.375, this.w * 0.275, 'mallsignmain').setScale(1.5)
+        this.add.sprite(this.w * 0.485, this.w * 0.1343, 'spbdirect').setScale(1.50)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage('Shirts, Pants, and Beyond! The best clothing store in town')
+            }) 
+        this.add.sprite(this.w * 0.2616, this.w * 0.169, 'furniture').setScale(1.50)
+            .setInteractive()
+            .on('pointerover', () => {
+                this.showMessage(`Now That's What I Call Furniture! A primo place to buy some sweet new stuff.`)
+            })
+            .on('pointerdown', () => {
+                this.buy('t-shirt', 150)
+                this.updateInventory
+            })
     }
 }
 
-class Demo2 extends AdventureScene {
+class Furniture extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("furniture", "The second room has a long name (it truly does).");
     }
     onEnter() {
         this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
@@ -42,9 +57,9 @@ class Demo2 extends AdventureScene {
             this.gotoScene('outro'));
     }
 }
-class SPB extends AdventureScene {
+class FrontEntrance extends AdventureScene {
     constructor() {
-        super("spb", "Shirts, Pants, and Beyond");
+        super("FE", "Midtown Mall Front Entrance");
     }
     preload() {
         this.load.image('entrance', 'mallentrance (1).png')
@@ -59,7 +74,7 @@ class SPB extends AdventureScene {
         this.add.sprite(this.w * 0.4, this.w * 0.345, 'doors').setScale(1.3)
             .setInteractive()
             .on('pointerover', () => {
-                if (this.hasItem('money')) {
+                if (this.bankaccount > 0) {
                     this.showMessage('Enter the Mall!');
                 } else {
                     this.showMessage(`You don't have any money. 
@@ -67,7 +82,7 @@ class SPB extends AdventureScene {
                 }
                 })
             .on('pointerdown', () => {
-                if (this.hasItem('money')) {
+                if (this.bankaccount > 0) {
                     this.gotoScene('navi');
                 } else {
                     this.showMessage(`You don't have any money.
@@ -80,7 +95,8 @@ class SPB extends AdventureScene {
                 this.showMessage('Get some money.');
             })
             .on('pointerdown', () => {
-                this.gainItem('money'),
+                this.bankaccount = 1000,
+                this.gainItem(this.bankaccount),
                 this.tweens.add({
                 targets: money,
                 alpha: {from: 1, to: 0},
@@ -92,7 +108,16 @@ class SPB extends AdventureScene {
 
     }
 }
-
+class FoodCourt extends AdventureScene {
+    constructor() {
+        super('FC')
+    }
+}
+class Clothing extends AdventureScene {
+    constructor() {
+        super('clothes')
+    }
+}
 class Intro extends Phaser.Scene {
     constructor() {
         super('intro')
@@ -113,7 +138,8 @@ class Intro extends Phaser.Scene {
                 duration: 3000
             })
             this.time.delayedCall(3000, () => this.cameras.main.fade(1000, 0,0,0));
-            this.time.delayedCall(1, () => this.scene.start('spb'));
+            this.time.delayedCall(1
+                , () => this.scene.start('FE'));
         });
     }
 }
@@ -137,7 +163,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, SPB, Navi, Demo2, Outro],
+    scene: [Intro, FrontEntrance, Navi, Furniture, FoodCourt, Outro],
     title: "Adventure Game",
 });
 
