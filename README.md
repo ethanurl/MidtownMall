@@ -28,5 +28,3 @@ Every object has pointerover message.
 Every object has pointerdown effect.
 
 Money in "Front Entrance" is animated.
-
-I made all of the assets using Pixelartmaker.com
